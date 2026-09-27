@@ -77,11 +77,19 @@ The scan identified multiple exposed services and provided service/version infor
 
 Vulnerability Enumeration
 
-Nmap vulnerability scripts were also used to identify known vulnerabilities associated with exposed services.
+Nmap vulnerability scripts were used to identify known vulnerabilities associated with exposed services.
 
 nmap -sV --script vuln 192.168.100.128
 
-Evidence:
+Web Enumeration
+
+Web enumeration was performed against the Metasploitable2 web server.
+
+Tools used:
+
+Gobuster
+Nikto
+Nmap HTTP scripts
 
 2. Web Application Security Testing
 
@@ -91,37 +99,25 @@ SQL Injection
 
 A SQL injection test demonstrated that user input could alter the underlying database query.
 
-Evidence:
-
 Blind SQL Injection
 
 Boolean-based SQL injection testing was performed using true and false conditions to observe differences in application responses.
-
-Evidence:
 
 Cross-Site Scripting
 
 Both reflected and stored XSS were tested within DVWA.
 
-Evidence:
-
 Command Injection
 
 Controlled command injection testing demonstrated that operating system commands could be executed through the vulnerable application.
-
-Evidence:
 
 Local File Inclusion
 
 A controlled Local File Inclusion test successfully accessed /etc/passwd through the vulnerable file inclusion parameter.
 
-Evidence:
-
 File Upload
 
 Testing demonstrated that the application accepted a non-image file and subsequently made the uploaded file accessible through the web server.
-
-Evidence:
 
 3. Wazuh SIEM
 
@@ -137,11 +133,7 @@ Wazuh correlated the events using:
 
 Rule 5404 — Three failed attempts to run sudo
 
-Severity:
-
-Level 10
-
-Evidence:
+Severity: Level 10
 
 File Integrity Monitoring
 
@@ -153,11 +145,7 @@ A controlled file modification generated:
 
 Rule 550 — Integrity checksum changed
 
-Severity:
-
-Level 7
-
-Evidence:
+Severity: Level 7
 
 SSH Authentication Monitoring
 
@@ -167,41 +155,26 @@ Wazuh generated:
 
 Rule 2502
 
-Severity:
+Severity: Level 10
 
-Level 10
-
-Evidence:
- 4. Security Detection & Investigation
-
-| Detection | Wazuh Rule | Level | Host | Investigation |
-|---|---:|---:|---|---|
-| Repeated failed sudo authentication | 5404 | 10 | Kali | Authentication timeline and command analysis |
-| File integrity modification | 550 | 7 | Kali | Integrity checksum change investigation |
-| Repeated SSH authentication failures | 2502 | 10 | Kali | SSH/PAM authentication event analysis |
-
-## Detection Workflow
+4. Security Detection & Investigation
+Detection	Wazuh Rule	Level	Host	Investigation
+Repeated failed sudo authentication	5404	10	Kali	Authentication timeline and command analysis
+File integrity modification	550	7	Kali	Integrity checksum change investigation
+Repeated SSH authentication failures	2502	10	Kali	SSH/PAM authentication event analysis
+Detection Workflow
 
 The lab demonstrates the following SOC workflow:
 
-1. Generate a controlled security event
-2. Collect the event through the Wazuh agent
-3. Correlate and generate a Wazuh alert
-4. Review the alert severity and rule
-5. Investigate surrounding events
-6. Identify the affected host and account
-7. Document the incident
-8. Recommend an appropriate response
-
-## Incident Reports
-
-Detailed investigation reports:
-
-- [Incident 001 — Sudo Failed Authentication](04_Incident_Reports/Incident-001-Sudo-Failed-Authentication.md)
-- [Incident 002 — FIM File Modification](04_Incident_Reports/Incident-002-FIM-File-Modification.md)
-- [Incident 003 — SSH Authentication Failures](04_Incident_Reports/Incident-003-SSH-Authentication-Failures.md)
-
-4. SOC Investigation Methodology
+Generate a controlled security event
+Collect the event through the Wazuh agent
+Correlate and generate a Wazuh alert
+Review the alert severity and rule
+Investigate surrounding events
+Identify the affected host and account
+Document the incident
+Recommend an appropriate response
+5. SOC Investigation Methodology
 
 The lab was used to practise a simplified SOC workflow:
 
@@ -238,18 +211,14 @@ When the event occurred
 Why the alert was generated
 Whether the activity was expected
 What response would be appropriate
-5. Incident Reports
+6. Incident Reports
 
-Detailed investigation reports are stored in:
+Detailed investigation reports:
 
-04_Incident_Reports/
-
-Current investigations include:
-
-Repeated failed sudo authentication
-File integrity modification
-Repeated SSH authentication failures
-6. Security Principles Demonstrated
+Incident 001 — Sudo Failed Authentication
+Incident 002 — FIM File Modification
+Incident 003 — SSH Authentication Failures
+7. Security Principles Demonstrated
 
 This project demonstrates practical experience with:
 
@@ -264,7 +233,6 @@ Log analysis
 Incident investigation
 Security documentation
 Defensive security monitoring
-
 Disclaimer
 
 This project was conducted in an isolated personal cybersecurity laboratory using intentionally vulnerable systems.
@@ -272,5 +240,3 @@ This project was conducted in an isolated personal cybersecurity laboratory usin
 Testing was restricted to systems owned or controlled within the laboratory environment.
 
 No unauthorised systems were targeted.
-
-
