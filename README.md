@@ -96,10 +96,9 @@ The vulnerability scan identified several known weaknesses associated with the d
 
 ### Evidence
 
-* [Nmap Service Scan](01_Network_Recon/01_Nmap/01_Nmap_Service_Scan.png)
-* [Nmap Top 20 Services](01_Network_Recon/01_Nmap/02_Nmap_Top20_Services.png)
-* [Nmap Vulnerability Scan](01_Network_Recon/01_Nmap/03_Nmap_Vulnerability_Scan.png)
-
+- [Nmap Service Scan](01_Network_Recon/01_Nmap/01_Nmap_Service_Scan.png)
+- [Nmap Vulnerability Scan](01_Network_Recon/01_Nmap/02_Nmap_Vulnerability_Scan.png)
+- [Nmap Top 20 Services](01_Network_Recon/01_Nmap/03_Nmap_Top20_Services.png)
 ---
 
 # 02 — Web Enumeration
