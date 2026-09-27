@@ -172,6 +172,35 @@ Severity:
 Level 10
 
 Evidence:
+ 4. Security Detection & Investigation
+
+| Detection | Wazuh Rule | Level | Host | Investigation |
+|---|---:|---:|---|---|
+| Repeated failed sudo authentication | 5404 | 10 | Kali | Authentication timeline and command analysis |
+| File integrity modification | 550 | 7 | Kali | Integrity checksum change investigation |
+| Repeated SSH authentication failures | 2502 | 10 | Kali | SSH/PAM authentication event analysis |
+
+## Detection Workflow
+
+The lab demonstrates the following SOC workflow:
+
+1. Generate a controlled security event
+2. Collect the event through the Wazuh agent
+3. Correlate and generate a Wazuh alert
+4. Review the alert severity and rule
+5. Investigate surrounding events
+6. Identify the affected host and account
+7. Document the incident
+8. Recommend an appropriate response
+
+## Incident Reports
+
+Detailed investigation reports:
+
+- [Incident 001 — Sudo Failed Authentication](04_Incident_Reports/Incident-001-Sudo-Failed-Authentication.md)
+- [Incident 002 — FIM File Modification](04_Incident_Reports/Incident-002-FIM-File-Modification.md)
+- [Incident 003 — SSH Authentication Failures](04_Incident_Reports/Incident-003-SSH-Authentication-Failures.md)
+
 4. SOC Investigation Methodology
 
 The lab was used to practise a simplified SOC workflow:
