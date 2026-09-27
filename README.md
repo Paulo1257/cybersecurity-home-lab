@@ -167,8 +167,7 @@ dvwa
 
 ### Evidence
 
-* [SQL Injection Evidence](02_DVWA/01_SQL_Injection/01_SQL_INJECTION.png)
-
+- [SQL Injection Evidence](02_DVWA/01_SQL_Injection/03_SQL%20INJECTION.png)
 ---
 
 ## Blind SQL Injection
