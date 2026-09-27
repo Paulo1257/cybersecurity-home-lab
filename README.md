@@ -225,7 +225,7 @@ uid=33(www-data)
 
 ### Evidence
 
-* [Command Injection Evidence](02_DVWA/04_Command_Injection/01_Command_injection.png)
+* [Command Injection Evidence](02_DVWA/04_Command_Injection/01_Command%20injection.png)
 
 ---
 
@@ -241,7 +241,7 @@ This successfully exposed the contents of `/etc/passwd`.
 
 ### Evidence
 
-* [File Inclusion Evidence](02_DVWA/05_File_Inclusion/01_File_inclusion.png)
+* [File Inclusion Evidence](02_DVWA/05_File_Inclusion/01_File%20inclusion.png)
 
 ---
 
@@ -253,8 +253,8 @@ The application accepted the file and made it accessible through the application
 
 ### Evidence
 
-* [File Upload Test](02_DVWA/06_File_Upload/01_file_upload.png)
-* [Uploaded File Evidence](02_DVWA/06_File_Upload/02_File_upload.png)
+* [File Upload Test](02_DVWA/06_File_Upload/01_file%20upload.png)
+* [Uploaded File Evidence](02_DVWA/06_File_Upload/02_File%20upload.png)
 
 ---
 
