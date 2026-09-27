@@ -194,8 +194,8 @@ A persistent JavaScript payload was stored within the application to demonstrate
 
 ### Evidence
 
-- [XSS Evidence](02_DVWA/3-XSS/01_XSS.png)
-- [Stored XSS Evidence](02_DVWA/3-XSS/02_XSS.png)
+- [XSS Evidence](02_DVWA/3-%20XSS/01_XSS.png)
+- [Stored XSS Evidence](02_DVWA/3-%20XSS/02_XSS.png)
 ---
 
 ## Command Injection
