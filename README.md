@@ -166,8 +166,7 @@ dvwa
 ```
 ### Evidence
 
-- [SQL Injection Evidence](02_DVWA/01_SQL_Injection/03_SQL%20INJECTION.png)
-
+- [SQL Injection Evidence](02_DVWA/01_SQL_Injection/02_SQL%20INJECTION.png)
 ## Blind SQL Injection
 
 Boolean-based testing was performed using true and false conditions to demonstrate how application behaviour can reveal database information.
