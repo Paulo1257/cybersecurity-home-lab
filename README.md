@@ -257,7 +257,6 @@ The application accepted the file and made it accessible through the application
 * [Uploaded File Evidence](02_DVWA/06_File_Upload/02_File%20upload.png)
 
 ---
-
 # 04 — Wazuh SIEM
 
 Wazuh was deployed as the SIEM and security monitoring platform for the lab.
@@ -266,190 +265,143 @@ The Wazuh manager was hosted at:
 
 ```text
 192.168.100.130
-```
 
 The Kali Linux machine was enrolled as a Wazuh agent:
-
-```text
 Agent ID: 001
 Agent Name: Kali
-```
 
 The agent was configured to collect system logs and security events.
-
----
-
-## Sudo Failed Authentication Detection
-
+Sudo Failed Authentication Detection
 A controlled sudo authentication test was performed by intentionally entering an incorrect password multiple times.
-
 Wazuh generated:
-
-```text
 Rule ID: 5404
 Level: 10
 Description: Three failed attempts to run sudo
-```
 
 The event recorded details including:
-
-* User: `kali`
-* Target: `root`
-* Command: `/usr/bin/whoami`
-* Working directory: `/home/kali`
-* TTY: `pts/0`
-* Log source: `journald`
-
-### Evidence
-
-* [Wazuh Rule 5404 Detection](03_Wazuh_SIEM/01_Sudo_Detection/01_Wazuh_Sudo_Rule_5404.png)
-* [Sudo Incident Investigation](03_Wazuh_SIEM/01_Sudo_Detection/02_Wazuh_Sudo_Incident.png)
-* [Sudo Event Timeline](03_Wazuh_SIEM/01_Sudo_Detection/03_Wazuh_Sudo_Timeline.png)
-
----
-
-## File Integrity Monitoring (FIM)
-
+- User: kali
+- Target: root
+- Command: /usr/bin/whoami
+- Working directory: /home/kali
+- TTY: pts/0
+- Log source: journald
+Evidence
+- [Wazuh Rule 5404 Detection](03_Wazuh_SIEM/01_Sudo_Detection/01_Wazuh_Sudo_Rule_5404.png)
+- [Sudo Incident Investigation](03_Wazuh_SIEM/01_Sudo_Detection/02_Wazuh_Sudo_Incident.png)
+- [Sudo Event Timeline](03_Wazuh_SIEM/01_Sudo_Detection/03_Wazuh_Sudo_Timeline.png)
+File Integrity Monitoring (FIM)
 Wazuh File Integrity Monitoring was configured to monitor:
-
-```text
 /opt/wazuh-lab
-```
 
 A controlled modification was then made to:
-
-```text
 /opt/wazuh-lab/test.txt
-```
 
 Wazuh detected the modification and generated:
-
-```text
 Rule ID: 550
 Level: 7
 Description: Integrity checksum changed
-```
 
 This demonstrates the ability to detect unauthorised or unexpected file modifications.
-
-### Evidence
-
-* [Wazuh Rule 550 Detection](03_Wazuh_SIEM/02_FIM_Detection/01_Wazuh_FIM_Rule_550.png)
-* [FIM File Modification Investigation](03_Wazuh_SIEM/02_FIM_Detection/02_Wazuh_FIM_File_Change.png)
-
----
-
-## SSH Authentication Monitoring
-
+Evidence
+- [Wazuh Rule 550 Detection](03_Wazuh_SIEM/02_FIM_Detection/01_Wazuh_FIM_Rule_550.png)
+- [FIM File Modification Investigation](03_Wazuh_SIEM/02_FIM_Detection/02_Wazuh_FIM_File_Change.png)
+SSH Authentication Monitoring
 SSH was enabled on the Kali system and controlled failed authentication attempts were generated.
-
 Wazuh detected the repeated failures and generated:
-
-```text
 Rule ID: 2502
 Level: 10
-Description: SSH authentication failures
-```
+Description: syslog: User missed the password more than one time
 
 The event demonstrated how repeated authentication failures can be identified and investigated through a SIEM.
+Evidence
+- [Wazuh Rule 2502 Detection](03_Wazuh_SIEM/03_SSH_Detection/01_Wazuh_SSH_Rule_2502.png)
+- [SSH Authentication Investigation](03_Wazuh_SIEM/03_SSH_Detection/02_Wazuh_SSH_Investigation.png)
+SSH Brute-Force Detection
+A controlled series of failed SSH authentication attempts was generated against the local Kali system using:
+ssh kali@localhost
 
-### Evidence
-
-* [Wazuh Rule 2502 Detection](03_Wazuh_SIEM/03_SSH_Detection/01_Wazuh_SSH_Rule_2502.png)
-* [SSH Authentication Investigation](03_Wazuh_SIEM/03_SSH_Detection/02_Wazuh_SSH_Investigation.png)
-
-## SSH Authentication Monitoring
-
-SSH was enabled on the Kali system and controlled failed authentication attempts were generated.
-
-Wazuh detected the repeated failures and generated:
-
-```text
+Multiple incorrect passwords were deliberately entered to simulate repeated authentication failures.
+Wazuh correlated the authentication events and generated a Level 10 Rule 2502 alert:
 Rule ID: 2502
 Level: 10
----
+Description: syslog: User missed the password more than one time
 
-# 05 — SOC Detection Summary
+The investigation identified:
+- Agent: Kali
+- Agent ID: 001
+- Agent IP: 192.168.7.128
+- Username: kali
+- Source IP: ::1
+- Decoder: sshd
+- Log source: journald
+- Rule ID: 2502
+- Severity: Level 10
+The source address ::1 represents the local IPv6 loopback address, confirming that this was a controlled local test rather than an external attack.
+Supporting Wazuh events included:
+- Rule 5760 — SSH authentication failed
+- Rule 5557 — Password check failed
+- Rule 5503 — PAM user login failed
+- Rule 2502 — Repeated authentication failures
+Evidence
+- [Wazuh Rule 2502 Detection](03_Wazuh_SIEM/04_SSH_Brute_Force_Detection/01_Wazuh_Rule_2502.png)
+- [SSH Failed Login Test](03_Wazuh_SIEM/04_SSH_Brute_Force_Detection/02_SSH_Failed_Login_Test.png)
+Incident Report
+[Incident 004 — SSH Brute-Force Detection](04_Incident_Reports/Incident-004-SSH-Brute-Force-Detection.md)
+05 — SOC Detection Summary
+Detection	Wazuh Rule	Level	Security Relevance
+Sudo Authentication Failures	5404	10	Detects repeated failed privilege escalation attempts
+File Integrity Change	550	7	Detects changes to monitored files
+SSH Authentication Failures	2502	10	Detects repeated SSH authentication failures
+SSH Brute-Force Detection	2502	10	Detects repeated failed SSH authentication attempts
 
-| Detection | Wazuh Rule | Level | Security Relevance |
-|---|---:|---:|---|
-| Sudo Authentication Failures | `5404` | 10 | Detects repeated failed privilege escalation attempts |
-| File Integrity Change | `550` | 7 | Detects changes to monitored files |
-| SSH Authentication Failures | `2502` | 10 | Detects repeated SSH authentication failures |
-| SSH Brute-Force Detection | `2502` | 10 | Detects repeated failed SSH authentication attempts |
 
-These detections demonstrate core SOC monitoring activities including **authentication monitoring, privilege escalation detection, file integrity monitoring, SSH monitoring and security event investigation**.
-
-# 06 — Incident Reports
-
+These detections demonstrate core SOC monitoring activities including authentication monitoring, privilege escalation detection, file integrity monitoring, SSH monitoring and security event investigation.
+06 — Incident Reports
 Detailed incident reports were created for the Wazuh detections.
-
-### Incident 001 — Sudo Failed Authentication
-
+Incident 001 — Sudo Failed Authentication
 [View Incident-001-Sudo-Failed-Authentication.md](04_Incident_Reports/Incident-001-Sudo-Failed-Authentication.md)
-
-**Detection:** Wazuh Rule `5404`
-**Severity:** Level 10
-**Category:** Authentication / Privilege Escalation
-
----
-
-### Incident 002 — FIM File Modification
-
+Detection: Wazuh Rule 5404
+Severity: Level 10
+Category: Authentication / Privilege Escalation
+Incident 002 — FIM File Modification
 [View Incident-002-FIM-File-Modification.md](04_Incident_Reports/Incident-002-FIM-File-Modification.md)
-
-**Detection:** Wazuh Rule `550`
-**Severity:** Level 7
-**Category:** File Integrity Monitoring
-
----
-
-### Incident 003 — SSH Authentication Failures
-
+Detection: Wazuh Rule 550
+Severity: Level 7
+Category: File Integrity Monitoring
+Incident 003 — SSH Authentication Failures
 [View Incident-003-SSH-Authentication-Failures.md](04_Incident_Reports/Incident-003-SSH-Authentication-Failures.md)
-
-**Detection:** Wazuh Rule `2502`
-**Severity:** Level 10
-**Category:** Authentication Monitoring
-
----
-### Incident 004 — SSH Brute-Force Detection
-
+Detection: Wazuh Rule 2502
+Severity: Level 10
+Category: Authentication Monitoring
+Incident 004 — SSH Brute-Force Detection
 [View Incident-004-SSH-Brute-Force-Detection.md](04_Incident_Reports/Incident-004-SSH-Brute-Force-Detection.md)
-
-**Detection:** Wazuh Rule `2502`  
-**Severity:** Level 10  
-**Category:** SSH Authentication / Brute-Force Detection
-# 07 — Skills Demonstrated
-
+Detection: Wazuh Rule 2502
+Severity: Level 10
+Category: SSH Authentication / Brute-Force Detection
+07 — Skills Demonstrated
 This project demonstrates practical experience in:
-
-* Network reconnaissance
-* Service enumeration
-* Vulnerability identification
-* Web application security testing
-* SQL injection
-* Blind SQL injection
-* Cross-Site Scripting
-* Command injection
-* Local File Inclusion
-* File upload testing
-* Linux security
-* SSH authentication monitoring
-* Privilege escalation detection
-* File Integrity Monitoring
-* SIEM configuration
-* Security event analysis
-* Incident investigation
-* Incident reporting
-* Git and GitHub
-* Virtualised cybersecurity lab development
-
----
-
-# 08 — Project Structure
-
-```text
+- Network reconnaissance
+- Service enumeration
+- Vulnerability identification
+- Web application security testing
+- SQL injection
+- Blind SQL injection
+- Cross-Site Scripting
+- Command injection
+- Local File Inclusion
+- File upload testing
+- Linux security
+- SSH authentication monitoring
+- Brute-force detection
+- Privilege escalation detection
+- File Integrity Monitoring
+- SIEM configuration
+- Security event analysis
+- Incident investigation
+- Incident reporting
+- Git and GitHub
+- Virtualised cybersecurity lab development
+08 — Project Structure
 Cybersecurity-Home-Lab/
 │
 ├── 01_Network_Recon/
@@ -459,7 +411,7 @@ Cybersecurity-Home-Lab/
 ├── 02_DVWA/
 │   ├── 01_SQL_Injection/
 │   ├── 02_Blind_SQL_Injection/
-│   ├── 3-XSS/
+│   ├── 03_XSS/
 │   ├── 04_Command_Injection/
 │   ├── 05_File_Inclusion/
 │   └── 06_File_Upload/
@@ -467,22 +419,19 @@ Cybersecurity-Home-Lab/
 ├── 03_Wazuh_SIEM/
 │   ├── 01_Sudo_Detection/
 │   ├── 02_FIM_Detection/
-│   └── 03_SSH_Detection/
+│   ├── 03_SSH_Detection/
+│   └── 04_SSH_Brute_Force_Detection/
 │
 ├── 04_Incident_Reports/
 │   ├── Incident-001-Sudo-Failed-Authentication.md
 │   ├── Incident-002-FIM-File-Modification.md
-│   └── Incident-003-SSH-Authentication-Failures.md
+│   ├── Incident-003-SSH-Authentication-Failures.md
+│   └── Incident-004-SSH-Brute-Force-Detection.md
 │
 └── README.md
-```
 
----
-
-# 09 — Lab Objectives
-
+09 — Lab Objectives
 The main objectives of this project were to:
-
 1. Build an isolated cybersecurity testing environment.
 2. Perform network and service reconnaissance.
 3. Identify vulnerabilities on an intentionally vulnerable system.
@@ -493,13 +442,7 @@ The main objectives of this project were to:
 8. Investigate SIEM detections.
 9. Document findings using incident reports.
 10. Build a professional cybersecurity portfolio demonstrating practical SOC and security-testing skills.
-
----
-
-## Disclaimer
-
-This project was conducted in an **isolated home lab environment** using intentionally vulnerable systems and applications.
-
+Disclaimer
+This project was conducted in an isolated home lab environment using intentionally vulnerable systems and applications.
 All security testing was performed against systems owned or controlled for educational purposes.
-
 No unauthorised systems were targeted.
