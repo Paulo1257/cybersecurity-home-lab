@@ -358,19 +358,27 @@ The event demonstrated how repeated authentication failures can be identified an
 * [Wazuh Rule 2502 Detection](03_Wazuh_SIEM/03_SSH_Detection/01_Wazuh_SSH_Rule_2502.png)
 * [SSH Authentication Investigation](03_Wazuh_SIEM/03_SSH_Detection/02_Wazuh_SSH_Investigation.png)
 
+## SSH Authentication Monitoring
+
+SSH was enabled on the Kali system and controlled failed authentication attempts were generated.
+
+Wazuh detected the repeated failures and generated:
+
+```text
+Rule ID: 2502
+Level: 10
 ---
 
 # 05 — SOC Detection Summary
 
-| Detection                    | Wazuh Rule | Level | Security Relevance                                    |
-| ---------------------------- | ---------: | ----: | ----------------------------------------------------- |
-| Sudo Authentication Failures |     `5404` |    10 | Detects repeated failed privilege escalation attempts |
-| File Integrity Change        |      `550` |     7 | Detects changes to monitored files                    |
-| SSH Authentication Failures  |     `2502` |    10 | Detects repeated failed SSH authentication            |
+| Detection | Wazuh Rule | Level | Security Relevance |
+|---|---:|---:|---|
+| Sudo Authentication Failures | `5404` | 10 | Detects repeated failed privilege escalation attempts |
+| File Integrity Change | `550` | 7 | Detects changes to monitored files |
+| SSH Authentication Failures | `2502` | 10 | Detects repeated SSH authentication failures |
+| SSH Brute-Force Detection | `2502` | 10 | Detects repeated failed SSH authentication attempts |
 
-These detections demonstrate core SOC monitoring activities including **authentication monitoring, privilege escalation detection, file integrity monitoring and security event investigation**.
-
----
+These detections demonstrate core SOC monitoring activities including **authentication monitoring, privilege escalation detection, file integrity monitoring, SSH monitoring and security event investigation**.
 
 # 06 — Incident Reports
 
@@ -405,7 +413,13 @@ Detailed incident reports were created for the Wazuh detections.
 **Category:** Authentication Monitoring
 
 ---
+### Incident 004 — SSH Brute-Force Detection
 
+[View Incident-004-SSH-Brute-Force-Detection.md](04_Incident_Reports/Incident-004-SSH-Brute-Force-Detection.md)
+
+**Detection:** Wazuh Rule `2502`  
+**Severity:** Level 10  
+**Category:** SSH Authentication / Brute-Force Detection
 # 07 — Skills Demonstrated
 
 This project demonstrates practical experience in:
